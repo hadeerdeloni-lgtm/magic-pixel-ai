@@ -1,25 +1,22 @@
 
 import streamlit as st
+import urllib.parse
 
 st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨")
 st.title("🎨 Magic Pixel AI")
 
-# واجهة بسيطة وسريعة
 prompt = st.text_input("صف الصورة (English):", value="A futuristic city")
 
 if st.button("توليد فوري ✨"):
     if prompt:
         with st.spinner("جاري جلب الصورة..."):
-            # تحويل الوصف لرابط صورة مباشر سريع جداً
-            # الطريقة دي بتضمن إن الصورة تظهر بضغطة واحدة مهما كان السيرفر بطيء
-            formatted_prompt = prompt.replace(" ", "-")
-            image_url = f"https://pollinations.ai/p/{formatted_prompt}?width=1024&height=1024&seed=42&model=flux"
+            # تعديل طريقة معالجة النص لضمان عمل الرابط
+            safe_prompt = urllib.parse.quote(prompt)
+            image_url = f"https://pollinations.ai/p/{safe_prompt}?width=1024&height=1024&nologo=true"
             
+            # عرض الصورة باستخدام الرابط المباشر
             st.image(image_url, caption="تم التوليد بنجاح!", use_container_width=True)
-            st.success("تمت العملية! يمكنك حفظ الصورة بالضغط المطول عليها.")
+            st.success("تمت العملية بنجاح!")
             st.balloons()
     else:
         st.warning("برجاء كتابة وصف")
-
-st.markdown("---")
-st.caption("Powered by Hadeer AI | 2025")
