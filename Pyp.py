@@ -7,22 +7,19 @@ st.title("🎨 Magic Pixel AI")
 
 prompt = st.text_input("صف الصورة (English):", value="A futuristic city")
 
+# ده الجزء اللي هيخلي الصورة تظهر أسرع
 if st.button("توليد فوري ✨"):
     if prompt:
-        with st.spinner("جاري جلب الصورة..."):
-            # توليد رقم عشوائي عشان الصورة تتغير كل مرة
-            seed = random.randint(1, 100000)
-            
-            # تنظيف الوصف وتحويله لروابط بتفهمها المتصفحات
+        placeholder = st.empty() # مكان محجوز للصورة
+        with st.spinner("جاري الرسم..."):
+            seed = random.randint(1, 999999)
             clean_prompt = prompt.replace(" ", "%20")
-            
-            # رابط المحرك السريع جداً
             image_url = f"https://image.pollinations.ai/prompt/{clean_prompt}?seed={seed}&width=1024&height=1024&nologo=true"
             
-            # عرض الصورة
-            st.image(image_url, caption=f"النتيجة لـ: {prompt}", use_container_width=True)
-            st.success("تم التوليد! اضغطي مرة أخرى لنتائج مختلفة.")
+            # عرض الصورة فوراً في المكان المحجوز لها
+            placeholder.image(image_url, caption=f"النتيجة: {prompt}")
             st.balloons()
+            st.success("تمت العملية! الصورة بالأعلى 👆")
     else:
         st.warning("برجاء كتابة وصف")
 
