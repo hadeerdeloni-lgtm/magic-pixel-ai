@@ -1,27 +1,40 @@
 
 import streamlit as st
 import random
+import urllib.parse
 
-st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨")
-st.title("🎨 Magic Pixel AI")
+# إعدادات الصفحة الاحترافية
+st.set_page_config(page_title="Magic Pixel AI - Pro Edition", page_icon="🚀", layout="centered")
 
-prompt = st.text_input("صف الصورة (English):", value="A futuristic city")
+# تصميم واجهة المستخدم
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; }
+    .stButton>button { width: 100%; border-radius: 20px; background-color: #ff4b4b; color: white; }
+    </style>
+    """, unsafe_allow_html=True)
 
-# ده الجزء اللي هيخلي الصورة تظهر أسرع
-if st.button("توليد فوري ✨"):
+st.title("🚀 Magic Pixel AI")
+st.subheader("أقوى محرك لتوليد الصور بالذكاء الاصطناعي")
+
+# خانة الوصف
+prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية:", value="A cybernetic cat in space")
+
+col1, col2 = st.columns([1, 1])
+
+if st.button("توليد الصورة الآن ✨"):
     if prompt:
-        placeholder = st.empty() # مكان محجوز للصورة
-        with st.spinner("جاري الرسم..."):
+        placeholder = st.empty()
+        with st.spinner("جاري الاتصال بالسيرفرات العملاقة..."):
             seed = random.randint(1, 999999)
-            clean_prompt = prompt.replace(" ", "%20")
-            image_url = f"https://image.pollinations.ai/prompt/{clean_prompt}?seed={seed}&width=1024&height=1024&nologo=true"
+            safe_prompt = urllib.parse.quote(prompt)
+            # استخدام سيرفر فائق الجودة
+            image_url = f"https://image.pollinations.ai/prompt/{safe_prompt}?seed={seed}&width=1024&height=1024&nologo=true&enhance=true"
             
-            # عرض الصورة فوراً في المكان المحجوز لها
-            placeholder.image(image_url, caption=f"النتيجة: {prompt}")
+            placeholder.image(image_url, caption=f"النتيجة لـ: {prompt}", use_container_width=True)
             st.balloons()
-            st.success("تمت العملية! الصورة بالأعلى 👆")
+            st.success("تم التوليد بنجاح! يمكنك الآن بيع هذه الصورة أو حفظها.")
     else:
-        st.warning("برجاء كتابة وصف")
+        st.warning("برجاء إدخال وصف أولاً")
 
-st.markdown("---")
-st.caption("Powered by Hadeer AI | 2025")
+st
