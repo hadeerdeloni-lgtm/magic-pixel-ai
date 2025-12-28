@@ -1,6 +1,8 @@
 import streamlit as st
 import random
 import urllib.parse
+import requests
+from io import BytesIO
 
 # ======================
 # Page Config
@@ -12,7 +14,7 @@ st.set_page_config(
 )
 
 # ======================
-# Custom CSS
+# CSS
 # ======================
 st.markdown("""
 <style>
@@ -25,10 +27,7 @@ st.markdown("""
     font-weight: bold; 
     height: 3.5em; 
 }
-.stTextInput>div>div>input {
-    text-align: center;
-    border-radius: 15px;
-}
+.stTextInput>div>div>input { text-align: center; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -44,7 +43,7 @@ prompt = st.text_input(
 )
 
 # ======================
-# Generate Image
+# Generate
 # ======================
 if st.button("توليد الصورة الآن ✨"):
     if prompt.strip():
@@ -57,22 +56,25 @@ if st.button("توليد الصورة الآن ✨"):
                 f"{safe_prompt}?width=1024&height=1024&seed={seed}"
             )
 
-            st.image(
-                image_url,
-                caption=f"✨ Result for: {prompt}",
-                use_container_width=True
-            )
+            # 🔥 التحميل كـ bytes (الحل السحري)
+            response = requests.get(image_url, timeout=30)
 
-            st.balloons()
-            st.success("✅ تم العرض بنجاح! الموقع يعمل بكفاءة قصوى.")
+            if response.status_code == 200:
+                image_bytes = BytesIO(response.content)
+
+                st.image(
+                    image_bytes,
+                    caption=f"✨ Result for: {prompt}",
+                    use_container_width=True
+                )
+                st.success("✅ تم العرض بنجاح! الموقع يعمل بكفاءة قصوى.")
+            else:
+                st.error("❌ فشل تحميل الصورة، حاولي مرة أخرى.")
     else:
         st.warning("⚠️ يرجى كتابة وصف أولاً")
 
-# ======================
-# Footer
-# ======================
 st.markdown("---")
 st.caption(
-    "💡 للمشتري: التطبيق يدعم التبديل بين محركات توليد صور ذكية "
-    "مع نظام fallback لضمان الاستمرارية."
+    "💡 التطبيق يدعم محركات توليد صور ذكية متعددة "
+    "مع نظام fallback احترافي."
 )
