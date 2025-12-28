@@ -1,58 +1,39 @@
-
 import streamlit as st
 import random
 import urllib.parse
 import time
 
-# 1. إعدادات الصفحة الاحترافية
-st.set_page_config(page_title="Magic Pixel AI - Pro Edition", page_icon="🎨", layout="centered")
+# 1. إعدادات الصفحة
+st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨")
 
-# 2. تصميم واجهة المستخدم (Dark Theme)
+# 2. تحسين المظهر
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
-    .stButton>button { 
-        width: 100%; 
-        border-radius: 20px; 
-        background-color: #ff4b4b; 
-        color: white; 
-        font-weight: bold;
-        border: none;
-        padding: 10px;
-    }
-    .stTextInput>div>div>input {
-        background-color: #1a1c23;
-        color: white;
-        border-radius: 10px;
-    }
+    .stButton>button { width: 100%; border-radius: 20px; background-color: #ff4b4b; color: white; height: 3em; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("🚀 Magic Pixel AI")
-st.subheader("أقوى محرك لتوليد الصور الاحترافية")
 
-# 3. خانة الوصف
-prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية (مثال: Cyberpunk City):", value="A futuristic city with neon lights")
+# 3. المدخلات
+prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية:", value="A futuristic city")
 
 if st.button("توليد الصورة الآن ✨"):
     if prompt:
-        placeholder = st.empty()
-        with st.spinner("🚀 جاري استدعاء الذكاء الاصطناعي..."):
-            # توليد Seed عشوائي وتوقيت زمني لمنع التكرار (Cache Busting)
+        with st.spinner("🚀 جاري تصميم صورتك الفريدة..."):
+            # صنع رابط فريد جداً لمنع أي تهنيج
             seed = random.randint(1, 1000000)
-            timestamp = time.time()
             safe_prompt = urllib.parse.quote(prompt)
+            image_url = f"https://image.pollinations.ai/prompt/{safe_prompt}?seed={seed}&width=1024&height=1024&nologo=true"
             
-            # الرابط المطور لضمان التحديث المستمر والجودة العالية
-            image_url = f"https://image.pollinations.ai/prompt/{safe_prompt}?seed={seed}&width=1024&height=1024&nologo=true&enhance=true&t={timestamp}"
+            # إضافة وقت انتظار بسيط لضمان استجابة السيرفر
+            time.sleep(2) 
             
-            # عرض الصورة
-            placeholder.image(image_url, caption=f"النتيجة لـ: {prompt}", use_container_width=True)
+            # عرض الصورة مباشرة
+            st.image(image_url, caption=f"✨ {prompt}", use_container_width=True)
+            
             st.balloons()
-            st.success("✨ تم التوليد بنجاح! الصورة الآن فريدة وجاهزة.")
+            st.success("✅ تم إظهار الصورة بنجاح!")
     else:
-        st.warning("⚠️ برجاء إدخال وصف أولاً")
-
-# تذييل الصفحة
-st.markdown("---")
-st.caption("Powered by Magic Pixel AI - High Quality Image Generation")
+        st.warning("⚠️ برجاء كتابة وصف")
