@@ -27,7 +27,7 @@ if st.button("توليد الصورة الآن ✨"):
     if prompt:
         with st.spinner("🚀 جاري جلب الصورة..."):
             seed = random.randint(1, 10000)
-            # استخدام سيرفر صور سريع جداً ومستحيل يتحظر
+            # استخدام سيرفر سريع جداً لضمان البيع
             image_url = f"https://loremflickr.com/1024/1024/{prompt.replace(' ', ',')}?lock={seed}"
             st.image(image_url, caption=f"✨ Result for: {prompt}", use_container_width=True)
             st.balloons()
