@@ -3,16 +3,13 @@ import streamlit as st
 st.set_page_config(page_title="Magic Pixel AI", page_icon="🚀")
 
 st.title("🚀 Magic Pixel AI")
-st.write("النسخة الاحترافية - تم التحديث بنجاح")
+st.write("النسخة الاحترافية المستقرة - تم التفعيل بنجاح")
 
-prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية (مثال: Galaxy, Car, Lion):")
+prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية:", value="A beautiful landscape")
 
-if st.button("توليد الصورة ✨"):
+if st.button("توليد ✨"):
     if prompt:
-        with st.spinner("جاري الجلب..."):
-            # سيرفر صور سريع جداً ومضمون للبيع
-            image_url = f"https://loremflickr.com/1024/1024/{prompt.replace(' ', ',')}"
-            st.image(image_url, caption=f"✨ Result for: {prompt}", use_container_width=True)
-            st.balloons()
-    else:
-        st.warning("يرجى كتابة وصف")
+        # سيرفر صور سريع جداً لا يعتمد على API معقد
+        image_url = f"https://loremflickr.com/1024/1024/{prompt.replace(' ', ',')}"
+        st.image(image_url, caption="Result", use_container_width=True)
+        st.balloons()
