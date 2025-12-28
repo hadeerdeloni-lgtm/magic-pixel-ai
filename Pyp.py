@@ -2,23 +2,16 @@ import streamlit as st
 import random
 import urllib.parse
 import requests
-from io import BytesIO
+import tempfile
 
-# ======================
-# Page Config
-# ======================
 st.set_page_config(
     page_title="Magic Pixel AI",
     page_icon="🎨",
     layout="centered"
 )
 
-# ======================
-# CSS
-# ======================
 st.markdown("""
 <style>
-.main { background-color: #0e1117; }
 .stButton>button { 
     width: 100%; 
     border-radius: 20px; 
@@ -31,9 +24,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ======================
-# UI
-# ======================
 st.title("🚀 Magic Pixel AI")
 st.write("أسرع محرك بحث وتوليد صور ذكي في العالم")
 
@@ -42,12 +32,9 @@ prompt = st.text_input(
     value="Futuristic City"
 )
 
-# ======================
-# Generate
-# ======================
 if st.button("توليد الصورة الآن ✨"):
     if prompt.strip():
-        with st.spinner("🚀 جاري توليد الصورة فائقة الجودة..."):
+        with st.spinner("🚀 جاري توليد الصورة..."):
             seed = random.randint(1, 99999)
             safe_prompt = urllib.parse.quote(prompt)
 
@@ -56,25 +43,27 @@ if st.button("توليد الصورة الآن ✨"):
                 f"{safe_prompt}?width=1024&height=1024&seed={seed}"
             )
 
-            # 🔥 التحميل كـ bytes (الحل السحري)
-            response = requests.get(image_url, timeout=30)
+            try:
+                r = requests.get(image_url, timeout=60)
 
-            if response.status_code == 200:
-                image_bytes = BytesIO(response.content)
+                if r.status_code == 200:
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as f:
+                        f.write(r.content)
+                        temp_image_path = f.name
 
-                st.image(
-                    image_bytes,
-                    caption=f"✨ Result for: {prompt}",
-                    use_container_width=True
-                )
-                st.success("✅ تم العرض بنجاح! الموقع يعمل بكفاءة قصوى.")
-            else:
-                st.error("❌ فشل تحميل الصورة، حاولي مرة أخرى.")
+                    st.image(
+                        temp_image_path,
+                        caption=f"✨ Result for: {prompt}",
+                        use_container_width=True
+                    )
+                    st.success("✅ تم العرض بنجاح! الموقع يعمل بكفاءة قصوى.")
+                else:
+                    st.error("❌ السيرفر لم يرجع صورة.")
+            except Exception as e:
+                st.error("❌ حصل خطأ في تحميل الصورة.")
+
     else:
         st.warning("⚠️ يرجى كتابة وصف أولاً")
 
 st.markdown("---")
-st.caption(
-    "💡 التطبيق يدعم محركات توليد صور ذكية متعددة "
-    "مع نظام fallback احترافي."
-)
+st.caption("💡 التطبيق يدعم محركات توليد صور ذكية متعددة مع نظام fallback احترافي.")
