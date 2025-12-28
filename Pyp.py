@@ -1,46 +1,48 @@
+
 import streamlit as st
 import random
 import urllib.parse
-import requests
 import time
+import requests
+from io import BytesIO
 
 # 1. إعدادات الصفحة
-st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨", layout="centered")
+st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨")
 
-# 2. تحسين المظهر (CSS)
+# 2. تصميم احترافي
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
-    .stButton>button { width: 100%; border-radius: 20px; background-color: #ff4b4b; color: white; height: 3.5em; font-weight: bold; font-size: 18px; }
-    .stTextInput>div>div>input { text-align: center; }
+    .stButton>button { width: 100%; border-radius: 20px; background-color: #ff4b4b; color: white; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("🚀 Magic Pixel AI")
-st.subheader("أسرع مولد صور بالذكاء الاصطناعي")
 
 # 3. المدخلات
-prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية:", value="A beautiful landscape")
+prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية:", value="A futuristic city")
 
 if st.button("توليد الصورة الآن ✨"):
     if prompt:
-        with st.spinner("🚀 جاري معالجة الصورة... انتظر لحظة"):
-            seed = random.randint(1, 999999)
+        with st.spinner("🚀 جاري الاتصال بالسيرفر وتوليد الصورة... قد يستغرق ذلك 10 ثوانٍ"):
+            seed = random.randint(1, 1000000)
             safe_prompt = urllib.parse.quote(prompt)
-            # رابط الصورة
             image_url = f"https://image.pollinations.ai/prompt/{safe_prompt}?seed={seed}&width=1024&height=1024&nologo=true"
             
-            # محاولة التحقق من أن الرابط شغال قبل عرضه
             try:
-                # عرض الصورة بطريقة مباشرة ومضمونة
-                st.image(image_url, caption=f"✨ Result for: {prompt}", use_container_width=True)
-                st.balloons()
-                st.success("✅ تم إظهار الصورة!")
-            except:
-                st.error("❌ عذراً، السيرفر مشغول حالياً. حاول مرة أخرى.")
+                # محاولة تحميل الصورة فعلياً للتأكد من وجودها
+                response = requests.get(image_url, timeout=15)
+                if response.status_code == 200:
+                    # إذا نجح التحميل، نعرض الصورة من الذاكرة مباشرة
+                    st.image(response.content, caption=f"✨ {prompt}", use_container_width=True)
+                    st.balloons()
+                    st.success("✅ تم التوليد بنجاح!")
+                else:
+                    st.error("❌ السيرفر مشغول حالياً، اضغطي على الزر مرة أخرى")
+            except Exception as e:
+                st.error("⚠️ يبدو أن هناك ضغطاً على الشبكة، يرجى المحاولة مرة ثانية")
     else:
-        st.warning("⚠️ برجاء كتابة وصف")
+        st.warning("⚠️ برجاء كتابة وصف أولاً")
 
-# تذييل بسيط
 st.markdown("---")
-st.write("💡 نصيحة: إذا لم تظهر الصورة، اضغط على الزر مرة أخرى لتحديث الاتصال.")
+st.caption("نصيحة للمشتري: هذا التطبيق يعتمد على بروتوكول API مجاني لتقليل تكاليف التشغيل.")
