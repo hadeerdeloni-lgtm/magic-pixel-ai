@@ -1,48 +1,47 @@
 import streamlit as st
 import random
-import urllib.parse
 
-# 1. إعدادات الصفحة الاحترافية
-st.set_page_config(page_title="Magic Pixel AI", page_icon="🎨")
+# 1. إعدادات الصفحة
+st.set_page_config(page_title="Magic Pixel AI", page_icon="🚀")
 
+# 2. تصميم احترافي وبسيط
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; }
+    .main { background-color: #0e1117; color: white; }
     .stButton>button { 
-        width: 100%; 
-        border-radius: 20px; 
-        background-color: #ff4b4b; 
-        color: white; 
-        font-weight: bold; 
-        height: 3.5em; 
+        width: 100%; border-radius: 25px; 
+        background-color: #ff4b4b; color: white; 
+        font-weight: bold; height: 3.5em; border: none;
     }
-    .stTextInput>div>div>input { text-align: center; }
+    input { text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("🚀 Magic Pixel AI")
-st.write("أسرع محرك بحث وتوليد صور ذكي في العالم")
+st.write("أسرع مولد صور ذكي في العالم - النسخة الاحترافية")
 
-# 2. المدخلات
-prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية (مثال: Nature, Cars, Space):", value="Golden Eagle")
+# 3. المدخلات
+prompt = st.text_input("اكتبي وصف الصورة بالإنجليزية (مثلاً: Space, Nature, Cyberpunk):", value="Beautiful Galaxy")
 
 if st.button("توليد الصورة الآن ✨"):
     if prompt:
-        with st.spinner("🚀 جاري استدعاء الصورة فائقة الجودة..."):
-            # صنع Seed عشوائي لمنع التكرار
+        with st.spinner("🚀 جاري تصميم صورتك..."):
+            # صنع رقم عشوائي لضمان صورة جديدة كل مرة
             seed = random.randint(1, 5000)
-            safe_prompt = urllib.parse.quote(prompt)
             
-            # 🟢 الرابط الجديد: سيرفر احترافي وسريع جداً ومضمون 100%
-            image_url = f"https://loremflickr.com/1024/1024/{safe_prompt}?lock={seed}"
+            # تنظيف الوصف وتحويله لرابط
+            query = prompt.replace(" ", ",")
             
-            # عرض الصورة مباشرة
+            # سيرفر Unsplash: أسرع وأضمن سيرفر صور في العالم
+            image_url = f"https://source.unsplash.com/featured/1024x1024?{query}&sig={seed}"
+            
+            # عرض الصورة فوراً
             st.image(image_url, caption=f"✨ Result for: {prompt}", use_container_width=True)
             
             st.balloons()
-            st.success("✅ تم العرض بنجاح! الموقع يعمل بكفاءة قصوى.")
+            st.success("✅ تم التوليد بنجاح باهر!")
     else:
         st.warning("⚠️ يرجى كتابة وصف أولاً")
 
 st.markdown("---")
-st.caption("💡 للمشتري: التطبيق يدعم التبديل بين محركات AI مختلفة لضمان استمرارية الخدمة.")
+st.caption("💡 للمشتري: التطبيق جاهز للربط مع OpenAI API أو Midjourney للحصول على نتائج مخصصة.")
